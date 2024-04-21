@@ -27,7 +27,9 @@ public class Main {
                 "[3] Ricerca",
                 "[4] Modifica contratto",
                 "[5] Modifica numero telefono",
-                "[6] Fine"
+                "[6] Cancella contatto inserendo il n. di telefono",
+                "[7] Cancella contatto inserendo nome/cognome",
+                "[8] Fine"
         };
 
         //do-while
@@ -46,6 +48,17 @@ public class Main {
                     visualizza(gestore, contrattiVenduti);
                     break;
                 case 3:
+                    if(contrattiVenduti !=0){
+                        //Ci sono contratti venduti
+                        //lettura, ricerca, visualizzazione
+                        if(ricerca(gestore, leggiPersona(Sitel, keyboard, gestore, contrattiVenduti), contrattiVenduti)){
+                            System.out.println("Il contatto esiste");
+                        } else {
+                            System.out.println("Il contatto non esiste");
+                        }
+                    }else{
+                        System.out.println("Non sono ancora presenti contratti venduti");
+                    }
                     break;
                 case 4:
                     ModificaContratto(Sitel, keyboard, gestore, contrattiVenduti);
@@ -60,16 +73,47 @@ public class Main {
                     }
                     visualizza1(gestore, contrattiVenduti);
                     break;
+                case 6:
+                    cancellaContattoPerTelefono(gestore, contrattiVenduti, keyboard);
+                    break;
+                case 7:
+                    cancellaContattoPerNomeCognome(gestore, contrattiVenduti, keyboard);
+                    break;
                 default: fine = false;
             }
         }while(fine);
     }
 
+    //metodo ricerca
+    private static boolean ricerca (Contatto[] gestore, Contatto contatto, int contrattiVenduti){
+        //Controllo se il nome e il cognome del contatto e ugale al nome e cogome del gestore
+        boolean ricerca = false;
+
+        for(int i = 0; i<contrattiVenduti; i++){
+            if(contatto.nome.equals(gestore[i].nome)  && contatto.cognome.equals(gestore[i].cognome)){
+                ricerca = true;
+            }
+        }
+        return ricerca;
+    }
+
     //metodo visualizza
-    private static void visualizza(Contatto[] gestore, int contrattiVenduti){
-        for(int i=0 ; i<=contrattiVenduti; i++){
+    private static void visualizza(Contatto [] gestore, int contrattiVenduti){
+
+        for(int i=0 ; i<contrattiVenduti; i++){
             System.out.println(gestore[i].stampa());
         }
+    }
+
+    //metodo conta contatti abitazione
+    private static int contaContattiAbitazione(Contatto [] gestore, int contrattiVenduti){
+        int contAbitazione=0;
+        for(int i=0; i<contrattiVenduti; i++){
+            if(gestore[i].tipo == tipoContratto.abitazione) {
+                contAbitazione++;
+            }
+        }
+        return contAbitazione;
     }
 
     //metodo leggiPersona
@@ -116,6 +160,88 @@ public class Main {
         }
         return persona;
     }
+
+    //metodo che cancella il contatto inserendo il numero di telefono
+    private static void cancellaContattoPerTelefono(Contatto[] gestore, int contrattiVenduti, Scanner keyboard) {
+        //chiedo all'utente di inserire il numero di telefono del contatto da cancellare
+        System.out.println("Inserisci il numero di telefono del contatto da cancellare: ");
+        String telefonoDaCancellare = keyboard.nextLine();
+
+        boolean contattoTrovato = false;
+        for (int i = 0; i < contrattiVenduti; i++) {
+            if (gestore[i].telefono.equals(telefonoDaCancellare)) {
+                // Se il numero di telefono corrisponde, cancella il contatto
+                for (int j = i; j < contrattiVenduti - 1; j++) {
+                    gestore[j] = gestore[j + 1];
+                }
+                contrattiVenduti--;
+                System.out.println("Contatto cancellato con successo.");
+                contattoTrovato = true;
+                break;
+            }
+        }
+
+        if (!contattoTrovato) {
+            System.out.println("Contatto non trovato.");
+        }
+    }
+
+    //metodo che cancella il contatto inserendo il nome e il cognome
+    private static void cancellaContattoPerNomeCognome(Contatto[] gestore, int contrattiVenduti, Scanner keyboard) {
+        //chiedo all'utente di inserire il nome del contatto da cancellare
+        System.out.println("Inserisci il nome del contatto da cancellare: ");
+        String nomeDaCancellare = keyboard.nextLine();
+        //chiedo all'utente di inserire il cognome del contatto da cancellare
+        System.out.println("Inserisci il cognome del contatto da cancellare: ");
+        String cognomeDaCancellare = keyboard.nextLine();
+
+        boolean contattoTrovato = false;
+        for (int i = 0; i < contrattiVenduti; i++) {
+            if (gestore[i].nome.equalsIgnoreCase(nomeDaCancellare) && gestore[i].cognome.equalsIgnoreCase(cognomeDaCancellare)) {
+                // Se il nome e cognome corrispondono, cancella il contatto
+                for (int j = i; j < contrattiVenduti - 1; j++) {
+                    gestore[j] = gestore[j + 1];
+                }
+                contrattiVenduti--;
+                System.out.println("Contatto cancellato con successo.");
+                contattoTrovato = true;
+                break;
+            }
+        }
+
+        if (!contattoTrovato) {
+            System.out.println("Contatto non trovato.");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //metodo cambia numero di telefono
     private static void NuovoTelefono(boolean Sitel, Scanner keyboard, Contatto[] gestore, int contrattiVenduti){
