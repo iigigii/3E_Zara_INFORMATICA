@@ -1,12 +1,17 @@
 package Utility;
+
+//importazione librerie
 import java.util.Scanner;
+
 public class Tools {
 
+    //metodo menù
     public static int printMenu (String opzioni[], Scanner tastiera)
     {
         int scelta;
         do {
-            ClrScr();
+            //ClrScr();
+            System.out.println();
             System.out.println("------------------");
             System.out.println(opzioni[0]);
             System.out.println("------------------");
@@ -24,10 +29,11 @@ public class Tools {
             }
         }
         while ((scelta < 1 ) || (scelta > opzioni.length -1 ));
-
         return scelta;
     }
 
+    /*
+    //metodo pulisci schermo
     public static void ClrScr(){
         try {
             new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
@@ -35,7 +41,9 @@ public class Tools {
             e.printStackTrace();
         }
     }
+     */
 
+    //metodo wait
     public static void Wait(int attesa) {
         try{
             Thread.sleep(attesa);
