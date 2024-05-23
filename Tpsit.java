@@ -1,3 +1,4 @@
+
 //Lotto project
 //Group 3: Basaglia, Zara, Guerra, Boscolo, Tomasello
 //class 3E
@@ -711,15 +712,6 @@ public class Tpsit {
         return money;
     }
 
-
-
-
-
-
-
-
-
-
     //Wait method
     private static void  Wait() {
         try{
@@ -738,8 +730,6 @@ public class Tpsit {
             e.printStackTrace();
         }
     }
-
-
 
     //clear screen (MacOS) method
     /*public static void ClrScr() {
