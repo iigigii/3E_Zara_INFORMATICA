@@ -32,15 +32,15 @@ public class Tools {
         return scelta;
     }
 
-    /*
     //metodo pulisci schermo
-    public static void ClrScr(){
+    /*public static void ClrScr(){
         try {
             new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
      */
 
     //metodo wait
