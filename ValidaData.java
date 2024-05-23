@@ -8,8 +8,12 @@ public class ValidaData {
         Scanner scanner = new Scanner(System.in);
         boolean continua = true;
         char scelta;
-
+        Boolean  dataValida;
+        boolean bisestile;
         boolean dataNonValida = false;
+
+
+        dataValida = false;
         do{
             //output for enter the date
             System.out.println("Inserisci un numero intero nel formato ggmmaaaa per determinare la data: ");
@@ -17,23 +21,31 @@ public class ValidaData {
             try {
                 //insertion of the date
                 numero = scanner.nextInt();
+                //Separare la data in giorno, mese, anno
+                int[] dataSeparata = separazioneData(numero);
+                if(!dataOk(dataSeparata[0], dataSeparata[1], dataSeparata[2])){
+                    dataValida=true;
+                    System.out.println("DATA ERRATA");
+                } else{
+                    System.out.println("DATA CORRETTA");
+                }
             } catch(Exception x) {
                 System.out.println("Errore : il valore inserito non e' valido");
                 dataNonValida = true;
                 scanner.nextLine();
             }
 
-            dataNonValida = validadata(numero);
-            if(dataNonValida)
-                System.out.println("DATA ERRATA");
-        } while(dataNonValida);
 
-        //Separare la data in giorno, mese, anno
-        int[] dataSeparata = separazioneData(numero);
+        } while(dataValida);
 
+
+
+
+        /*
         System.out.println("Conversione stringa 1 : " + dataToString1(dataSeparata));
         System.out.println("Conversione stringa 2 : " + dataToString2(dataSeparata));
         System.out.println("Conversione stringa 3 : " + dataToString3(dataSeparata));
+        */
     }
 
     /* Separazione della data inserita in giorno, mese ed anno*/
@@ -107,14 +119,73 @@ public class ValidaData {
     //1 : Out of range
     //2 : Domain incorrect
 
-    /*
-    private static int validaDataString(String numero){
-
+    //metodo bisestile
+    private static boolean bisestile(int anno){
+        return((anno % 4 == 0 &&anno % 100 != 0) || anno % 400 == 0); //l'if ritorna un valore booleano
     }
 
-    private static String errore(int tipoErrore){
+    //metodo giornoOk
+    private static boolean dataOk(int giorno, int mese, int anno){
+        //return(data[1]==2 && data[0]>=29);
+        boolean valida = false;
+        /*
+        switch (mese){
+            case 1:
+            case 3:
+            case 5:
+            case 7:
+            case 8:
+            case 10:
+            case 12:
+                valida=(giorno<32 && giorno>0);
+                break;
+            case 4:
+            case 6:
+            case 9:
+            case 11:
+                valida=(giorno<31 && giorno>0);
+            case 2:
+                if(bisestile(anno) && giorno>0 && giorno<30){
+                    valida= true;
+                } else if (giorno>0 && giorno < 29){
+                    valida= true;
+                }
+                break;
 
+        }
+         */
+
+
+        /*
+        if(mese==2){
+            if(bisestile(anno) && giorno>0 && giorno<30){
+                valida= true;
+            } else if (giorno>0 && giorno < 29){
+                valida= true;
+            }
+        } else {
+            valida = switch (mese) {
+                case 1, 3, 5, 7, 8, 10, 12 -> (giorno < 32 && giorno > 0);
+                case 4, 6, 9, 11 -> (giorno < 31 && giorno > 0);
+                default -> false;
+            };
+        }
+         */
+
+
+
+
+        valida = switch (mese) {
+            case 1, 3, 5, 7, 8, 10, 12 -> (giorno < 32 && giorno > 0);
+            case 4, 6, 9, 11 -> (giorno < 31 && giorno > 0);
+            case 2 -> (bisestile(anno) && giorno > 0 && giorno < 30) || (giorno > 0 && giorno < 29);
+            default -> false;
+        };
+        return valida;
     }
-     */
+
+
+
+
+
 }
-
