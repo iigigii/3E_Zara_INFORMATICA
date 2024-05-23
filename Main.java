@@ -1,213 +1,32 @@
-//Zara Luigi
-//Classe 3E
-/*
-Modificare l'esercizio visto in classe in modo da inserire un "contatto" solamente se non è
-già presente all'interno della collezione, controllare il cognome e il nome.
-*/
-
-//importazione librerie
-import static tools.utility.*;
-import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
-        //dichiarazione scanner
-        Scanner keyboard = new Scanner(System.in);
-
-        //dichiarazione e inizializzazione delle variabili
-        final int nMax=3;
-        int contrattiVenduti = 0;
-        Contatto[] gestore = new Contatto[nMax];
-        boolean fine = true;
-        boolean Sitel = true;
-
-        //menù
-        String[] operazioni = {"VODAFONE", "[1] Inserimento",
-                "[2] Visualizzazione",
-                "[3] Ricerca",
-                "[4] Modifica contratto",
-                "[5] Modifica numero telefono",
-                "[6] Fine"
-        };
-
-        //do-while
-        do {
-            switch(menu(operazioni, keyboard)) {
-                case 1:
-                    if(contrattiVenduti < nMax){
-                        //firma contratto
-                        gestore[contrattiVenduti]=leggiPersona(Sitel,keyboard, gestore, contrattiVenduti);
-                        contrattiVenduti++;
-                    }else{
-                        System.out.println("Non ci sono più contratti da vendere");
-                    }
-                    break;
-                case 2:
-                    visualizza(gestore, contrattiVenduti);
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    ModificaContratto(Sitel, keyboard, gestore, contrattiVenduti);
-                    break;
-                case 5:
-                    if (contrattiVenduti < nMax) {
-                        // firma contratto
-                        NuovoTelefono(Sitel, keyboard, gestore, contrattiVenduti);
-                        contrattiVenduti++;
-                    } else {
-                        System.out.println("Non ci sono più contratti da vendere");
-                    }
-                    visualizza1(gestore, contrattiVenduti);
-                    break;
-                default: fine = false;
-            }
-        }while(fine);
+        String input = "la mamma di Martina va al mercato a comprare le fragole per fare la macedonia";
+        splitString(input, 40);
     }
 
-    //metodo visualizza
-    private static void visualizza(Contatto[] gestore, int contrattiVenduti){
-        for(int i=0 ; i<=contrattiVenduti; i++){
-            System.out.println(gestore[i].stampa());
-        }
-    }
 
-    //metodo leggiPersona
-    private static Contatto leggiPersona(boolean Sitel, Scanner keyboard, Contatto[] gestore, int contrattiVenduti){
-        //istanzio un oggetto di tipo contatto
-        Contatto persona = new Contatto();
 
-        //vettore di stringhe
-        String[] tipoC = {"telefono", "[1] - abitazione","[2] - cellulare", "[3] -aziendale"};
+    public static void splitString(String input, int maxLength) {
+        int length = input.length();
+        int startIndex = 0;
+        int endIndex = 0;
 
-        //dichiarazione variabile per la verifica del contatto
-        boolean contattoGiaEsistente;
-
-        do {
-            contattoGiaEsistente=true;
-            //chiedo all'utente di fornire in ingresso le seguenti informazioni:
-            System.out.println("Inserisci il tuo nome: ");
-            persona.nome = keyboard.nextLine();
-            System.out.println("Inserisci il tuo cognome: ");
-            persona.cognome = keyboard.nextLine();
-
-            //controllo che l'utente non sia già registrato
-            for (int i = 0; i < contrattiVenduti; i++) {
-                if (persona.nome.equals(gestore[i].nome) && persona.cognome.equals(gestore[i].cognome)) {
-                    System.out.println("L'utente inserito è già in possesso di un account. Registrane uno nuovo:");
-                    contattoGiaEsistente = false;
-                    break;
-                }
+        while (startIndex < length) {
+            endIndex = Math.min(startIndex + maxLength, length);
+            while (endIndex < length && !Character.isWhitespace(input.charAt(endIndex - 1))) {
+                endIndex--;
             }
-        } while (contattoGiaEsistente==false);
 
-        //chiedo all'utente di insereire il suo numero di telefono
-        System.out.println("Inserisci il tuo numero di telefono: ");
-        if(Sitel){//se Sitel è true:
-            //scanner numero telefono
-            persona.telefono = keyboard.nextLine();
-
-            //switch-case
-            switch(menu(tipoC, keyboard)){
-                case 1 -> persona.tipo = tipoContratto.abitazione;
-                case 2 -> persona.tipo = tipoContratto.cellulare;
-                default -> persona.tipo = tipoContratto.aziendale;
+            System.out.println(input.substring(startIndex, endIndex));
+            startIndex = endIndex;
+            while (startIndex < length && Character.isWhitespace(input.charAt(startIndex))) {
+                startIndex++;
             }
         }
-        return persona;
     }
 
-    //metodo cambia numero di telefono
-    private static void NuovoTelefono(boolean Sitel, Scanner keyboard, Contatto[] gestore, int contrattiVenduti){
-        //dichiarazione e inizializzazione delle variabili
-        boolean contattoTrovato = false;
+ 
 
-        //chiedo all'utente di inserire il cognome del contatto di cui vuole modificarne il numero di telefono
-        System.out.println("Inserisci il cognome del contatto di cui vuoi modificarne il numero di telefono: ");
-        String cognomeDaModificare = keyboard.nextLine();
-        //chiedo all'utente di inserire il nome del contatto di cui vuole modificarne il numero di telefono
-        System.out.println("Inserisci il nome del contatto di cui vuoi modificarne il numero di telefono: ");
-        String nomeDaModificare = keyboard.nextLine();
 
-        //Cerca il contatto all'interno della collezione del file contatto
-        for (int i = 0; i < contrattiVenduti; i++) {
-            if (nomeDaModificare.equalsIgnoreCase(gestore[i].nome) && cognomeDaModificare.equalsIgnoreCase(gestore[i].cognome)) {
-                System.out.println("Contatto trovato.");
-                System.out.println("Inserisci il nuovo numero di telefono: ");
-                String nuovoNumero = keyboard.nextLine();
-                gestore[i].telefono = nuovoNumero;
-                System.out.println("Numero di telefono aggiornato con successo per il contatto: " + nomeDaModificare + " " + cognomeDaModificare);
-                contattoTrovato = true;
-                break;
-            }
-        }
 
-        //controllo che il contatto di cui si vuole modificare il numero esista
-        if (!contattoTrovato) {
-            do{
-                System.out.println("Nome o cognome errati!");
-                System.out.println("Reinserisci il cognome: ");
-                cognomeDaModificare = keyboard.nextLine();
-                System.out.println("Reinserisci il nome: ");
-                nomeDaModificare = keyboard.nextLine();
-            }while(contattoTrovato);
-        }
-    }
-
-    //metodo visualizza nuovo numero di telefono
-    private static void visualizza1(Contatto[] gestore, int contrattiVenduti){
-        for(int i=0 ; i<=contrattiVenduti; i++){
-            System.out.println(gestore[i].stampa());
-        }
-    }
-
-    //metodo per la modifica del ontratto
-    private static void ModificaContratto(boolean Sitel, Scanner keyboard, Contatto[] gestore, int contrattiVenduti) {
-        //dichiarazione e inizializzazione delle variabili
-        boolean contattoTrovato = false;
-
-        //istanzio un oggetto di tipo contatto
-        Contatto persona = new Contatto();
-
-        //vettore di stringhe
-        String[] tipoC = {"telefono", "[1] - abitazione","[2] - cellulare", "[3] -aziendale"};
-
-        //chiedo all'utente di inserire il cognome del contatto di cui vuole modificarne il numero di telefono
-        System.out.println("Inserisci il cognome del contatto di cui vuoi modificare il contratto: ");
-        String cognomeDaModificare = keyboard.nextLine();
-        //chiedo all'utente di inserire il nome del contatto di cui vuole modificarne il numero di telefono
-        System.out.println("Inserisci il nome del contatto di cui vuoi modificare il contratto: ");
-        String nomeDaModificare = keyboard.nextLine();
-
-        //Cerca il contatto all'interno della collezione del file contatto
-        for (int i = 0; i < contrattiVenduti; i++) {
-            if (nomeDaModificare.equalsIgnoreCase(gestore[i].nome) && cognomeDaModificare.equalsIgnoreCase(gestore[i].cognome)) {
-                System.out.println("Contatto trovato.");
-
-                if(Sitel){//se Sitel è true:
-                    //switch-case
-                    switch(menu(tipoC, keyboard)){
-                        case 1 -> persona.tipo = tipoContratto.abitazione;
-                        case 2 -> persona.tipo = tipoContratto.cellulare;
-                        default -> persona.tipo = tipoContratto.aziendale;
-                    }
-                }
-
-                System.out.println("Contratto aggiornato con successo per il contatto: " + nomeDaModificare + " " + cognomeDaModificare);
-                contattoTrovato = true;
-                break;
-            }
-        }
-
-        //controllo che il contatto di cui si vuole modificare il tipo di contratto esista
-        if (!contattoTrovato) {
-            do{
-                System.out.println("Nome o cognome errati!");
-                System.out.println("Reinserisci il cognome: ");
-                cognomeDaModificare = keyboard.nextLine();
-                System.out.println("Reinserisci il nome: ");
-                nomeDaModificare = keyboard.nextLine();
-            }while(contattoTrovato);
-        }
-    }
 }
